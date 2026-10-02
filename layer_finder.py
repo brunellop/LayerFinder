@@ -13,6 +13,25 @@ from qgis.PyQt.QtWidgets import (
 from qgis.core import QgsProject, QgsLayerTreeLayer, QgsLayerTreeGroup
 
 
+# Compatibilità Qt5 / Qt6
+try:
+    WINDOW_DIALOG = Qt.WindowType.Dialog
+    WINDOW_STAYS_ON_TOP = Qt.WindowType.WindowStaysOnTopHint
+    KEY_DOWN = Qt.Key.Key_Down
+    KEY_UP = Qt.Key.Key_Up
+    KEY_RETURN = Qt.Key.Key_Return
+    KEY_ENTER = Qt.Key.Key_Enter
+    USER_ROLE = Qt.ItemDataRole.UserRole
+except AttributeError:
+    WINDOW_DIALOG = Qt.Dialog
+    WINDOW_STAYS_ON_TOP = Qt.WindowStaysOnTopHint
+    KEY_DOWN = Qt.Key_Down
+    KEY_UP = Qt.Key_Up
+    KEY_RETURN = Qt.Key_Return
+    KEY_ENTER = Qt.Key_Enter
+    USER_ROLE = Qt.UserRole
+
+
 class SearchLineEdit(QLineEdit):
     """Campo di ricerca con navigazione dei risultati tramite frecce."""
 
@@ -21,15 +40,15 @@ class SearchLineEdit(QLineEdit):
         self.dialog = dialog
 
     def keyPressEvent(self, event):
-        if event.key() == Qt.Key_Down:
+        if event.key() == KEY_DOWN:
             self.dialog.move_selection(1)
             return
 
-        if event.key() == Qt.Key_Up:
+        if event.key() == KEY_UP:
             self.dialog.move_selection(-1)
             return
 
-        if event.key() in (Qt.Key_Return, Qt.Key_Enter):
+        if event.key() in (KEY_RETURN, KEY_ENTER):
             self.dialog.select_current_layer()
             return
 
@@ -37,7 +56,7 @@ class SearchLineEdit(QLineEdit):
 
 
 class LayerSearchDialog(QDialog):
-    """Finestra minimale per cercare e selezionare i layer del progetto."""
+    """Finestra minimale per cercare e selezionare layer e gruppi."""
 
     def __init__(self, iface):
         super().__init__(iface.mainWindow())
@@ -45,7 +64,7 @@ class LayerSearchDialog(QDialog):
         self.items = []
 
         self.setWindowTitle("Cerca layer")
-        self.setWindowFlags(Qt.Dialog | Qt.WindowStaysOnTopHint)
+        self.setWindowFlags(WINDOW_DIALOG | WINDOW_STAYS_ON_TOP)
         self.setMinimumWidth(500)
         self.resize(600, 350)
 
@@ -101,8 +120,8 @@ class LayerSearchDialog(QDialog):
         for item_type, item_data, name in self.items:
             if not query or query in name.casefold():
                 item = QListWidgetItem(name)
-                item.setData(Qt.UserRole, item_data)
-                item.setData(Qt.UserRole + 1, item_type)
+                item.setData(USER_ROLE, item_data)
+                item.setData(USER_ROLE + 1, item_type)
                 self.results.addItem(item)
 
         self.results.blockSignals(False)
@@ -131,10 +150,10 @@ class LayerSearchDialog(QDialog):
         if item is None:
             return
 
-        item_type = item.data(Qt.UserRole + 1)
+        item_type = item.data(USER_ROLE + 1)
 
         if item_type == "layer":
-            layer_id = item.data(Qt.UserRole)
+            layer_id = item.data(USER_ROLE)
             layer = QgsProject.instance().mapLayer(layer_id)
 
             if layer is None:
@@ -147,7 +166,7 @@ class LayerSearchDialog(QDialog):
                 self.accept()
 
         elif item_type == "group":
-            group = item.data(Qt.UserRole)
+            group = item.data(USER_ROLE)
 
             if group is not None:
                 self.iface.layerTreeView().setCurrentNode(group)
@@ -177,10 +196,8 @@ class LayerFinder(QObject):
         self.action.setStatusTip("Cerca rapidamente un layer nel progetto")
         self.action.triggered.connect(self.run)
 
-        # Icona nella barra degli strumenti Plugin di QGIS.
         self.iface.addToolBarIcon(self.action)
         self.iface.addPluginToMenu("&Layer Finder", self.action)
-
 
     def unload(self):
         if self.dialog is not None:
