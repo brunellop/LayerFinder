@@ -6,18 +6,18 @@ It is designed to make navigation easier in QGIS projects containing many layers
 
 ## Features
 
-* Search layers and groups by name
-* Partial name matching
-* Case-insensitive search
-* Real-time search results while typing
-* Navigate results with the **Up** and **Down** arrow keys
-* Select the current result with **Enter**
-* Select a result with a double click
-* Select layers directly in the QGIS Layer Panel
-* Supports nested groups
-* Works with different QGIS layer types
-* Simple and non-invasive interface
-* No external dependencies
+- Search layers and groups by name
+- Partial name matching
+- Case-insensitive search
+- Real-time search results while typing
+- Navigate results with the **Up** and **Down** arrow keys
+- Select the current result with **Enter**
+- Select a result with a double click
+- Select layers directly in the QGIS Layer Panel
+- Supports nested groups
+- Works with different QGIS layer types
+- Simple and non-invasive interface
+- No external dependencies
 
 ## Installation
 
@@ -39,9 +39,9 @@ Start typing the name of a layer or group. The results are updated automatically
 
 Use:
 
-* **↑ / ↓** to navigate through the results
-* **Enter** to select the current result
-* **Double click** to select a result
+- **↑ / ↓** to navigate through the results
+- **Enter** to select the current result
+- **Double click** to select a result
 
 When a layer is selected, it becomes the current layer in the QGIS Layer Panel.
 
@@ -49,23 +49,33 @@ When a group is selected, the corresponding group is selected in the Layer Tree.
 
 ## Requirements
 
-* QGIS **3.28 or later**
-* Compatible with QGIS versions up to **4.99**
+- QGIS **3.28 or later**
+- Compatible with QGIS versions up to **4.99**
 
+## Project structure
+
+```text
+LayerFinder/
+├── __init__.py
+├── layer_finder.py
+├── metadata.txt
+├── icon.png
+├── README.md
+└── LICENSE
 ```
 
 ## Development
 
 Layer Finder is developed in **Python**, using:
 
-* **PyQGIS** for interaction with QGIS
-* **PyQt** for the user interface
+- **PyQGIS** for interaction with QGIS
+- **PyQt** for the user interface
 
 The plugin has no external Python dependencies and aims to keep the implementation simple, lightweight and easy to maintain.
 
 ## Current version
 
-**1.0.0**
+**1.0.1**
 
 The current version focuses exclusively on fast, name-based searching and selection of layers and groups in the QGIS Layer Tree.
 
@@ -73,11 +83,8 @@ The current version focuses exclusively on fast, name-based searching and select
 
 **Paolo Brunello**
 
-Website: http://webstorymap.it/
+Website: https://github.com/brunellop/LayerFinder
 
 ## License
 
-GPL 2.0 o successive
-
-
-
+Layer Finder is distributed under the **GNU General Public License v2.0 or later (GPL-2.0-or-later)**.
