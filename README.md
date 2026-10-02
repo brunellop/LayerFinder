@@ -65,7 +65,7 @@ The plugin has no external Python dependencies and aims to keep the implementati
 
 ## Current version
 
-**0.1.8**
+**1.0.0**
 
 The current version focuses exclusively on fast, name-based searching and selection of layers and groups in the QGIS Layer Tree.
 
